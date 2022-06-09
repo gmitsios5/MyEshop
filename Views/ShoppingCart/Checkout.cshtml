@@ -1,0 +1,163 @@
+﻿@model IEnumerable<MyEshop.Models.Products>
+@using static MyEshop.Models.MyCart
+@using Microsoft.AspNetCore.Session
+@using Microsoft.AspNetCore
+@using MyEshop.Controllers
+@inject IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    List<MyCart> cartItems = Serializer.Deserialize(HttpContextAccessor.HttpContext.Session.GetString("Mycart"));
+    <h1 class="display-2">Checkout</h1>
+    <br />
+    @if (cartItems != null)
+    {
+        @using (Html.BeginForm("UpdateCart", "ShoppingCart", FormMethod.Post))
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Image
+                        </th>
+                        <th>
+                            Product
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Subtotal
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @foreach (var cart in cartItems)
+                    {
+
+                        <tr>
+                            <td>
+                                <img src="../../Images/@cart.Products.ProductImage" style="width:100px; height: 100px;">
+                            </td>
+                            <td>
+                                @cart.Products.ProductTitle
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" name="quantity" min="1" max="" value="@cart.Quantity" readonly />
+                            </td>
+                            <td>
+                                @cart.Products.Value
+                            </td>
+                            <td>
+                                @(String.Format("{0:N0}", cart.Products.Value * cart.Quantity ))
+                            </td>
+                            <td>
+                                <a class="btn btn-danger" asp-controller="ShoppingCart" asp-action="Delete" asp-route-id="@cart.Products.ProductID">Delete</a>
+                                <a class="btn btn-primary" asp-action="Details" asp-route-id="@cart.Products.ProductID" asp-controller="Products">Details</a> 
+
+
+                            </td>
+                        </tr>
+
+
+                    }
+                    <tr>
+                        <td colspan="3">
+                            Total:
+                        </td>
+                        <td>
+                            @{
+                                List<MyCart> tempcart = Serializer.Deserialize(HttpContextAccessor.HttpContext.Session.GetString("Mycart"));
+                                var total = String.Format("{0:N0}", tempcart.Sum(x => x.Quantity * x.Products.Value));
+
+                            }
+                            @total &euro;
+                        </td>
+
+                    </tr>
+
+
+
+                </tbody>
+            </table>
+            <a class="btn btn-success"  asp-controller="Products" asp-action="Index">Continue Shopping</a>
+        }
+    }
+    else
+    {
+        <h4 style="color:red">Your cart is empty !</h4>
+
+    }
+}
+@using (Html.BeginForm("ProcessOrder", "ShoppingCart", FormMethod.Post)){
+<table class="form-control">
+    <tr>
+        <td>
+            <h1 class="display-6" style="text-decoration:underline">Customer's Info:</h1>
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <th>Full Name:</th>
+            <td><input type="text" name="customer_full_name" class="form-control" placeholder="Enter your Full Name..." required /></td>
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <th>Email:</th>
+            <td><input type="email" name="customer_email" class="form-control" placeholder="Enter your Email..." required /></td>
+        </td>
+    </tr>
+     <tr>
+        <td>
+            <th>Phone Number:</th>
+            <td><input type="tel" name="customer_phone" class="form-control" placeholder="Enter your Phone number..." required /></td>
+        </td>
+    </tr>
+        <tr>
+        <td>
+            <h1 class="display-6">Shipping Info:</h1>
+        </td>
+    </tr>
+         <tr>
+        <td>
+            <th>Address:</th>
+            <td><input type="text" name="customer_address" class="form-control" placeholder="Enter your Address..." required /></td>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <th>City:</th>
+            <td><input type="text" name="customer_city" class="form-control" placeholder="Enter your City..." required /></td>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <th>State Code:</th>
+            <td><input type="number" name="customer_state_code" class="form-control" placeholder="Enter your State Code..." required /></td>
+        </td>
+    </tr>
+        <tr>
+        <td>
+            <th>Notes:</th>
+            <td><textarea name="customer_notes" class="form-control" rows="4" cols="50" placeholder="Enter your notes..."></textarea></td>
+        </td>
+        </tr>
+
+        <tr>      
+            <td><input class="btn btn-success" type="submit" value="Process Order"/></td>
+        </tr>
+</table>
+}
+
+

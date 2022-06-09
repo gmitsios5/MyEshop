@@ -1,0 +1,91 @@
+﻿@model IEnumerable<MyEshop.Models.Orders>
+
+@{
+    ViewData["Title"] = "TrackMyOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="display-2">Track My Order</h1>
+<br />
+@using(Html.BeginForm("TrackMyOrder","Orders",FormMethod.Get))
+{
+    @Html.TextBox("search")
+    <input class="btn btn-info" asp-action="TrackMyOrder" asp-controller="Orders" type="submit" value="Track"/>
+}
+
+@if (FormMethod.Get != 0) {<h1>Order Not Found.</h1> }else if(FormMethod.Get == 0) {
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StateCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Notes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr><td>
+            @if(item.OrderStatus == "Canceled")
+                            {
+                                <p style="color:red">@Html.DisplayFor(modelItem => item.OrderStatus)</p>
+                            }else{
+                            @Html.DisplayFor(modelItem => item.OrderStatus)
+                            }
+            </td>
+             <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StateCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderDate)
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.OrderID">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+}

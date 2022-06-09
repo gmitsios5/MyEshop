@@ -1,0 +1,76 @@
+﻿@model IEnumerable<MyEshop.Models.Products>
+<link rrel="stylesheet" href="site.css" />
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="display-2">Products</h1><br />
+
+@using(Html.BeginForm("Index","Products",FormMethod.Get))
+{
+    @Html.TextBox("search")
+    <input class="btn btn-info" type="submit" value="Search"/>
+}
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
+</p>
+
+@if (Model.Count() == 0) {<h1>Product Not Found. </h1> }else {
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+               @* @Html.DisplayFor(modelItem => item.ProductImage)*@
+               <img src="Images/@item.ProductImage">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Value)&euro;
+            </td>
+                    <td>@if(item.Quantity.Equals(0))
+                        {
+                            <p style="color:red;">Unavailable</p>
+                        }else{@Html.DisplayFor(modelItem => item.Quantity)}
+                        
+            </td>
+            <td>
+                
+                <a class="btn btn-dark" asp-action="Edit" asp-route-id="@item.ProductID">Edit</a> 
+                <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.ProductID">Details</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ProductID">Delete</a>
+                <a class="btn btn-success" asp-controller="ShoppingCart" asp-action="OrderNow" asp-route-id="@item.ProductID">Add to cart</a>
+     
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+}

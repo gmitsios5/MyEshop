@@ -1,0 +1,116 @@
+﻿@model IEnumerable<MyEshop.Models.Products>
+@using static MyEshop.Models.MyCart
+@using Microsoft.AspNetCore.Session
+@using Microsoft.AspNetCore
+@using MyEshop.Controllers
+@inject IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    List<MyCart> cartItems = new List<MyCart>();
+    cartItems = Serializer.Deserialize(HttpContextAccessor.HttpContext.Session.GetString("Mycart"));
+    <h1 class="display-2">My Cart</h1>
+    <br />
+    @if (HttpContextAccessor.HttpContext != null)
+    {
+        @if (cartItems != null)
+        {
+            @using (Html.BeginForm("UpdateCart", "ShoppingCart", FormMethod.Post))
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Image
+                            </th>
+                            <th>
+                                Product
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Price
+                            </th>
+                            <th>
+                                Subtotal
+                            </th>
+                            <th>
+                            Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                        @foreach (var cart in cartItems)
+                        {
+
+                            <tr>
+                                <td>
+                                    <img src="../../Images/@cart.Products.ProductImage" style="width:100px; height: 100px;">
+                                </td>
+                                <td>
+                                    @cart.Products.ProductTitle
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="quantity" min="1" max="@cart.Products.Quantity" value="@cart.Quantity" />
+                                </td>
+                                <td>
+                                    @cart.Products.Value &euro;
+                                </td>
+                                <td>
+                                    @(String.Format("{0:N0}", cart.Products.Value * cart.Quantity )) &euro;
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger" asp-action="Delete" asp-controller="ShoppingCart" asp-route-id="@cart.Products.ProductID">Delete</a>
+                                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@cart.Products.ProductID" asp-controller="Products">Details</a> 
+                                </td>
+                            </tr>
+
+
+                        }
+                        <tr>
+                            <td colspan="3">
+                                Total:
+                            </td>
+                            <td>
+                                @{
+                                    List<MyCart> tempcart = Serializer.Deserialize(HttpContextAccessor.HttpContext.Session.GetString("Mycart"));
+                                    var total = String.Format("{0:N0}", tempcart.Sum(x => x.Quantity * x.Products.Value));
+
+                                }
+                                @total &euro;
+                            </td>
+
+                        </tr>
+
+
+
+                    </tbody>
+                </table>
+                <a class="btn btn-secondary" asp-action="ProductsForCustomers"  asp-controller="Products">Continue Shopping</a>               
+                <a class="btn btn-success" asp-action="Checkout" asp-controller="ShoppingCart">Checkout</a>
+                <input class="btn btn-success" type="submit" value="Save changes"/>
+            }
+
+        }
+        else if (cartItems == null)
+        {
+            <h4 style="color:red">Your cart is empty !</h4>
+
+        }
+
+    }
+    else
+    {
+        <h4 style="color:red">Your cart is empty !</h4>
+    }
+}
+
+
+

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<MyEshop.Models.Employee>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="display-2">Employees</h1><br />
+
+@using(Html.BeginForm("Index","Employees",FormMethod.Get))
+{
+    @Html.TextBox("search") 
+    <input class="btn btn-info" type="submit" value="Search"/>
+}
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
+</p>
+@if(Model.Count() == 0) {<h1>Employee Not Found. </h1> }else {
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HiringDate)
+            </th>
+            <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                
+                @*@Html.DisplayFor(modelItem => item.EmployeeImage)*@
+                <img src="Images/@item.EmployeeImage">
+            </td>
+            <td>
+                
+                @Html.DisplayFor(modelItem => item.EmployeeName)
+            </td>
+            <td>
+                
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                
+                @Html.DisplayFor(modelItem => item.HiringDate)
+            </td>
+            <td>
+                <a class="btn btn-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+}

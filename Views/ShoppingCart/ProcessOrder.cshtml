@@ -1,0 +1,20 @@
+﻿@model IEnumerable<MyEshop.Models.Products>
+@using static MyEshop.Models.MyCart
+@using Microsoft.AspNetCore.Session
+@using Microsoft.AspNetCore
+@using MyEshop.Controllers
+@inject IHttpContextAccessor HttpContextAccessor;
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "ProcessOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    
+    <h1>Your order has succesfully completed!!</h1>
+
+    
+
+
+

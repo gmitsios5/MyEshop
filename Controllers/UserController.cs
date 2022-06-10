@@ -20,11 +20,13 @@ namespace MyEshop.Controllers
             _signInManager = signInManager;
         }
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
+            /*SHOW ALL USERS*/
         public IActionResult Index()
         {
             var users = _unitOfWork.User.GetUsers();
             return View(users);
         }
+            /*EDIT USER'S CREDS*/
         public async Task<IActionResult> Edit(string id)
         {
             var user = _unitOfWork.User.GetUser(id);
@@ -47,7 +49,7 @@ namespace MyEshop.Controllers
             return View(vm);
         }
         [HttpPost]
-
+            /*GET ALL THE ROLES AND ADD OR REMOVE ROLES FROM USER*/
         public async Task<IActionResult> OnPostAsync(EditUserViewModel data)
         {
             var user = _unitOfWork.User.GetUser(data.User.Id);

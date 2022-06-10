@@ -5,6 +5,7 @@ namespace MyEshop.Models
 {
     public static class Serializer
     {
+         /*CREATE NEW SESSION FOR CART LIST*/
         public static List<MyCart>?Deserialize(string? cart)
         {
             if (cart==null)
@@ -16,7 +17,7 @@ namespace MyEshop.Models
                 return JsonConvert.DeserializeObject<List<MyCart>>(cart);
             }
         }
-
+        /*GET SESSION AND SHOW*/
         public static string Serialize(List<MyCart>? cart)
         {
             return JsonConvert.SerializeObject(cart);

@@ -23,25 +23,28 @@ namespace MyEshop.Controllers
         }
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
         // GET: Products
+        /*METHOD FOR SEARCHING PRODUCTS BY TITLE FOR ADMIN*/
         public IActionResult Index(string search)
         {
             return View(_context.Products.Where(x => x.ProductTitle.Contains(search) || search == null).ToList());
             /*return View( _context.Products.ToList());*/
         }
 
-
+        /*METHOD FOR SHOWING PRODUCT PAGE FOR CUSTOMERS ONLY*/
         public IActionResult ProductsforCustomers()
         {
             return View(_context.Products.Where(x => x.Quantity>=1).ToList());
             /*return View( _context.Products.ToList());*/
         }
-
+        /*METHOD FOR SEARCHING PRODUCTS BY TITLE FOR CUSTOMER*/
         public IActionResult Search(string search)
         {
             return View( _context.Products.Where(x => x.ProductTitle.Contains(search) || search == null).ToList());
         }
+
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
         // GET: Products/Details/5
+        /*METHOD FOR SHOWING PRODUCT DETAILS*/
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -73,7 +76,7 @@ namespace MyEshop.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
-
+        /*METHOD FOR CREATING PRODUCT*/
         public async Task<IActionResult> Create([Bind("ProductID,ProductImage,ProductTitle,Description,Value,Quantity")] Products products)
         {
             if (ModelState.IsValid)
@@ -85,7 +88,7 @@ namespace MyEshop.Controllers
             }
             return View(products);
         }
-
+        /*METHOD FOR UPLOADING IMAGE OF PRODUCT*/
         private void UploadImage(Products products)
         {
             var file = HttpContext.Request.Form.Files;
@@ -134,6 +137,7 @@ namespace MyEshop.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        /*METHOD FOR EDITING PRODUCT'S DATA*/
         public async Task<IActionResult> Edit(int id, [Bind("ProductID,ProductImage,ProductTitle,Description,Value,Quantity")] Products products)
         {
             if (id != products.ProductID)
@@ -188,6 +192,7 @@ namespace MyEshop.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        /*METHOD FOR DELETING PRODUCT*/
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var products = await _context.Products.FindAsync(id);
@@ -195,7 +200,7 @@ namespace MyEshop.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        /*METHOD FOR CHECKING IF PRODUCT EXISTS*/
         private bool ProductsExists(int id)
         {
             return _context.Products.Any(e => e.ProductID == id);

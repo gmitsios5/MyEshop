@@ -24,6 +24,8 @@ namespace MyEshop.Controllers
 
         // GET: Employees
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
+
+        /* METHOD FOR SEARCHING EMPLOYEES BY NAME*/
         public IActionResult Index(string search)
         {
             return View(_context.Employee.Where(x => x.EmployeeName.Contains(search) || search == null).ToList());
@@ -31,6 +33,7 @@ namespace MyEshop.Controllers
         }
 
         // GET: Employees/Details/5
+        /* METHOD FOR SHOWING DETAILS OF EMPLOYEE*/
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -59,6 +62,8 @@ namespace MyEshop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+
+        /* METHOD FOR CREATING NEW EMPLOYEE*/
         public async Task<IActionResult> Create([Bind("Id,EmployeeImage,EmployeeName,BirthDate,HiringDate")] Employee employee)
         {
             UploadImage(employee);
@@ -71,7 +76,7 @@ namespace MyEshop.Controllers
             }
             return View(employee);
         }
-
+        /* METHOD FOR UPLOADING IMAGE OF EMPLOYEE*/
         private void UploadImage(Employee employee)
         {
             var file = HttpContext.Request.Form.Files;
@@ -114,6 +119,7 @@ namespace MyEshop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        /* METHOD FOR EDITING EMPLOYEE'S DATA*/
         public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeImage,EmployeeName,BirthDate,HiringDate")] Employee employee)
         {
             if (id != employee.Id)
@@ -146,6 +152,7 @@ namespace MyEshop.Controllers
         }
 
         // GET: Employees/Delete/5
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -166,6 +173,7 @@ namespace MyEshop.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        /*METHOD FOR DELETING EMPLOYEE*/
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var employee = await _context.Employee.FindAsync(id);
@@ -173,7 +181,7 @@ namespace MyEshop.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        /*METHOD FOR CHECKING IF EMPLOYEE EXISTS*/
         private bool EmployeeExists(int id)
         {
             return _context.Employee.Any(e => e.Id == id);

@@ -29,7 +29,7 @@ namespace MyEshop.Controllers
             
             return View(await _context.Orders.ToListAsync());
         }*/
-
+        /*METHOD FOR SEARCHING ORDER BY ID*/
         public async Task<IActionResult> Index(int search)
         {
             return View(_context.Orders.Where(x => x.OrderID.Equals(search) || search == 0).ToList());
@@ -42,6 +42,7 @@ namespace MyEshop.Controllers
         }
 
         // GET: Orders/Details/5
+        /*METHOD FOR SHOWING DETAILS OF ORDER*/
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -61,6 +62,7 @@ namespace MyEshop.Controllers
         }
 
         [Authorize(Policy = Constants.Policies.RequireAdmin)]
+        /*METHOD FOR ADDING PRODUCTS TO CART LIST*/
         public List<OrderDetails> OrderDetails(int? id)
         {
             
@@ -86,6 +88,7 @@ namespace MyEshop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        /*METHOD FOR CREATING NEW ORDER*/
         public async Task<IActionResult> Create([Bind("OrderID,OrderStatus,CustomerName,Email,Address,City,StateCode,PhoneNumber,Notes,OrderDate")] Orders orders)
         {
             if (ModelState.IsValid)
@@ -118,6 +121,7 @@ namespace MyEshop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        /*METHOD FOR EDITING EXISTING ORDER*/
         public async Task<IActionResult> Edit(int id, [Bind("OrderID,OrderStatus,CustomerName,Email,Address,City,StateCode,PhoneNumber,Notes,OrderDate")] Orders orders)
         {
             if (id != orders.OrderID)
@@ -169,6 +173,7 @@ namespace MyEshop.Controllers
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        /*METHOD FOR  ORDER*/
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var orders = await _context.Orders.FindAsync(id);
@@ -176,7 +181,7 @@ namespace MyEshop.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        /*METHOD FOR CHECKING IF ORDER EXISTS*/
         private bool OrdersExists(int id)
         {
             return _context.Orders.Any(e => e.OrderID == id);

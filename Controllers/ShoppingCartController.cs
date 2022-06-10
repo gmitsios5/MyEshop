@@ -24,7 +24,7 @@ namespace MyEshop.Controllers
         {
             return View();
         }
-
+        /*METHOD */
         public ActionResult OrderNow(int? id)
         {
             /*HttpContext.Session.SetInt32("ShoppingCart",id);*/
@@ -37,7 +37,7 @@ namespace MyEshop.Controllers
 
             //This gives you the byte array.
 
-
+            /*iF CART IS EMPTY THEN ADD PRODUCT*/
             if (HttpContext.Session.Get("Mycart") == null)
             {
                 List<MyCart> cart = new List<MyCart>
@@ -49,6 +49,7 @@ namespace MyEshop.Controllers
 
             }
             else
+                /*CREATE NEW CART LIST WITH PRODUCTS AND REFRESH QUANTITY*/
             {
                 List<MyCart> Iscart = Serializer.Deserialize(HttpContext.Session.GetString("Mycart"));
                 int check = IsExistingCheck(id);
@@ -66,7 +67,7 @@ namespace MyEshop.Controllers
             }
             return View("Index");
         }
-
+            /*CHECKS IF PRODUCT EXISTS IN CART*/
         private int IsExistingCheck(int? id)
         {
             List<MyCart> Iscart = Serializer.Deserialize(HttpContext.Session.GetString("Mycart"));
@@ -92,7 +93,7 @@ namespace MyEshop.Controllers
             HttpContext.Session.SetString("Mycart", Serializer.Serialize(Iscart));
             return View("Index");
         }
-
+         /* UPDATE QUANTITY OF CART*/
         public ActionResult UpdateCart(IFormCollection formc)
         {
             string[] quantities = formc["quantity"];
@@ -104,12 +105,12 @@ namespace MyEshop.Controllers
             HttpContext.Session.SetString("Mycart", Serializer.Serialize(CartList));
             return View("Index");
         }
-
+            /*CHECKOUT PAGE*/
         public ActionResult Checkout()
         {
             return View("Checkout");
         }
-
+        /*FINISH ORDER WITH SHIPPING AND CUSTOMER CREDENTIALS*/
         public ActionResult ProcessOrder(IFormCollection formc)
         {
             List<MyCart> CartList = Serializer.Deserialize(HttpContext.Session.GetString("Mycart"));

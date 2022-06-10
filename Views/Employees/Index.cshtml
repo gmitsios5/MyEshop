@@ -40,7 +40,7 @@
             <td>
                 
                 @*@Html.DisplayFor(modelItem => item.EmployeeImage)*@
-                <img src="Images/@item.EmployeeImage">
+                <img src="/Images/@Html.DisplayFor(modelItem => item.EmployeeImage)">
             </td>
             <td>
                 

@@ -125,7 +125,7 @@ namespace MyEshop.Controllers
             {
                 try
                 {
-                   
+                    UploadImage(employee);
                     _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
